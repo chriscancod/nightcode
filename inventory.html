@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NOCTIS Inventory</title>
+    <style>
+        body {
+            background: #080808;
+            color: #f0ece4;
+            font-family: monospace;
+            padding: 40px;
+        }
+
+        h1 {
+            letter-spacing: 4px;
+            font-size: 24px;
+            margin-bottom: 32px;
+        }
+
+        .product {
+            border: 1px solid #222;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .name { font-size: 18px; margin-bottom: 6px;}
+        .details { color: #888; font-size: 13px; }
+        .in-stock { color: #c8ff00; }
+        .low-stock { color: #ffaa00; }
+        .sold-out { color: #ff3232; }
+        .sale { color: #c8ff00; font-size: 11px; margin-left: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1>=== NOCTIS INVENTORY ===</h1>
+    <div id="inventory"></div>
+
+    <script>
+        const products = [
+            { name: "Oversized Tee", price: 85, quantity: 10, discount: false },
+            { name: "Cargo Pants", price: 120, quantity: 3, discount: true },
+            { name: "Night Hoodie", price: 150, quantity: 0, discount: false },
+            { name: "Clikey Keyboard", price: 90, quantity: 7, discount: true }
+        ]
+
+        function getStatus(quantity) {
+            if (quantity === 0) return "SOLD OUT";
+            else if (quantity <= 5) return "LOW STOCK";
+            else return "IN STOCK";
+        }
+
+        function getStatusClass(quantity) {
+            if (quantity === 0) return "sold-out";
+            else if (quantity <= 5) return "low-stock";
+            else return "in-stock";
+        }
+
+        function getPrice(price, discount) {
+            if (discount) return (price * 0.9).toFixed(2);
+            else return price.toFixed(2);
+        }
+
+        const container = document.getElementById("inventory");
+
+        products.forEach(product => {
+            const status = getStatus(product.quantity)
+            const statusClass = getStatusClass(product.quantity);
+            const price = getPrice(product.price, product.discount);
+            const sale = product.discount ? "<span class='sale'>ON SALE</span>" : "";
+
+            container.innerHTML += `
+                <div class="product">
+                    <div class="name">${product.name}${sale}</div>
+                    <div class="details">
+                        $${price} &nbsp;|&nbsp; 
+                        <span class="${statusClass}">${status}</span> &nbsp;|&nbsp;
+                        Stock: ${product.quantity}
+                    </div>
+                </div>
+                `
+        })
+    </script>
+
+</body>
+</html>
